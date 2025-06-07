@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.2)
-project(fzf LANGUAGES C)
+project(fzf LANGUAGES CXX C)
 
-add_library(${PROJECT_NAME} SHARED "src/fzf.c")
+add_library(${PROJECT_NAME} SHARED "src/fzf.c" "src/frecency.cpp")
 
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>)
@@ -18,6 +18,7 @@ target_compile_definitions(${PROJECT_NAME}
 set_target_properties(${PROJECT_NAME} PROPERTIES
     WINDOWS_EXPORT_ALL_SYMBOLS ON
     C_STANDARD 99
+    CXX_STANDARD 17
     PREFIX lib)
 
 # This cannot be a generator expression in this version of CMake
