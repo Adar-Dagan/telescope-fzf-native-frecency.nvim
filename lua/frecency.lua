@@ -104,7 +104,7 @@ local native = ffi.load(library_path)
 
 ffi.cdef [[
     typedef struct {} fastMap;
-    
+
     fastMap *init();
     void set_score(fastMap *, const char *, float);
     float get_score(fastMap *, const char *);
@@ -114,7 +114,7 @@ ffi.cdef [[
 frecency.init = function()
   local map = native.init()
 
-  for key, value in pairs(table) do
+  for key, _ in pairs(table) do
     native.set_score(map, key, get_score(key))
   end
   return map
