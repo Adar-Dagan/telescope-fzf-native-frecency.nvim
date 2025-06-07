@@ -61,8 +61,8 @@ local get_fzf_sorter = function(opts)
         self.state.slab = nil
       end
       if self.state.map ~= nil then
-          frecency.free(self.state.map)
-          self.state.map = nil
+        frecency.free(self.state.map)
+        self.state.map = nil
       end
     end,
     start = function(self, prompt)
