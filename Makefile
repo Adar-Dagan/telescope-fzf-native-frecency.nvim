@@ -3,7 +3,7 @@ CXXFLAGS += -Wall -fpic -std=c++17
 
 ifeq ($(OS),Windows_NT)
     CC = gcc
-	CXX = g++
+    CXX = g++
     TARGET := libfzf.dll
     TARGET_FRECENCY := libfrecency.dll
 ifeq (,$(findstring $(MSYSTEM),MSYS UCRT64 CLANG64 CLANGARM64 CLANG32 MINGW64 MINGW32))
