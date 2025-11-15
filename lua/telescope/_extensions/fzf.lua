@@ -1,5 +1,6 @@
 local fzf = require "fzf_lib"
 local sorters = require "telescope.sorters"
+local frecency = require "frecency"
 
 local case_enum = setmetatable({
   ["smart_case"] = 0,
@@ -48,6 +49,7 @@ local get_fzf_sorter = function(opts)
       if self.filter_function then
         self.__highlight_prefilter = clear_filter_fun
       end
+      self.state.map = frecency.init()
     end,
     destroy = function(self)
       for _, v in pairs(self.state.prompt_cache) do
@@ -57,6 +59,10 @@ local get_fzf_sorter = function(opts)
       if self.state.slab ~= nil then
         fzf.free_slab(self.state.slab)
         self.state.slab = nil
+      end
+      if self.state.map ~= nil then
+        frecency.free(self.state.map)
+        self.state.map = nil
       end
     end,
     start = function(self, prompt)
@@ -98,7 +104,8 @@ local get_fzf_sorter = function(opts)
       if score == 0 then
         return -1
       else
-        return 1 / score
+        local frecency_score = frecency.get_score(self.state.map, vim.uv.cwd() .. "/" .. line) + 1
+        return 1 / (frecency_score * score)
       end
     end,
     highlighter = function(self, prompt, display)
@@ -140,6 +147,8 @@ return require("telescope").register_extension {
     if override_generic then
       config.generic_sorter = wrap_sorter(conf)
     end
+
+    frecency.setup(ext_config.frecency)
   end,
   exports = {
     native_fzf_sorter = function(opts)
