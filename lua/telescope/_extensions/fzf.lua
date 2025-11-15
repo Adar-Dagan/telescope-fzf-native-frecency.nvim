@@ -49,7 +49,7 @@ local get_fzf_sorter = function(opts)
       if self.filter_function then
         self.__highlight_prefilter = clear_filter_fun
       end
-      self.state.map = frecency.init()
+      self.state.map = frecency.init(vim.uv.cwd())
     end,
     destroy = function(self)
       for _, v in pairs(self.state.prompt_cache) do
@@ -104,7 +104,7 @@ local get_fzf_sorter = function(opts)
       if score == 0 then
         return -1
       else
-        local frecency_score = frecency.get_score(self.state.map, vim.uv.cwd() .. "/" .. line) + 1
+        local frecency_score = frecency.get_score(self.state.map, line) + 1
         return 1 / (frecency_score * score)
       end
     end,
