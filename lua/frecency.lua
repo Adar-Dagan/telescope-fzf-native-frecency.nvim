@@ -111,11 +111,14 @@ ffi.cdef [[
     void freeMap(fastMap *);
 ]]
 
-frecency.init = function()
+frecency.init = function(prefix)
   local map = native.init()
+  local prefix = prefix .. "/"
 
   for key, _ in pairs(table) do
-    native.set_score(map, key, get_score(key))
+    if string.sub(key, 1, #prefix) == prefix then
+      native.set_score(map, string.sub(key, #prefix + 1), get_score(key))
+    end
   end
   return map
 end
